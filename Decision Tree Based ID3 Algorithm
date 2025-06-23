@@ -1,0 +1,24 @@
+from sklearn.tree import DecisionTreeClassifier
+import pandas as pd
+
+cols = input("Enter column names separated by commas (last one is label): ").split(',')
+n = int(input("Enter number of training examples: "))
+data = []
+for i in range(n):
+    row = input(f"Enter row {i+1} (comma-separated): ").split(',')
+    data.append(row)
+
+df = pd.DataFrame(data, columns=cols)
+X = pd.get_dummies(df.iloc[:, :-1])
+y = df.iloc[:, -1]
+
+model = DecisionTreeClassifier(criterion='entropy')
+model.fit(X, y)
+
+test_input = input(f"Enter new sample values ({', '.join(cols[:-1])}): ").split(',')
+test_df = pd.DataFrame([test_input], columns=cols[:-1])
+test_encoded = pd.get_dummies(test_df)
+test_encoded = test_encoded.reindex(columns=X.columns, fill_value=0)
+
+prediction = model.predict(test_encoded)
+print("Predicted class:", prediction[0])
