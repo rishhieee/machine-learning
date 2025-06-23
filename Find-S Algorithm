@@ -1,0 +1,24 @@
+def get_input():
+    n = int(input("Enter number of attributes: "))
+    m = int(input("Enter number of training examples: "))
+    data = []
+    for _ in range(m):
+        row = input(f"Enter example {_ + 1} (comma-separated, last is label): ").split(',')
+        data.append(row)
+    return n, data
+
+def find_s_algorithm(n, data):
+    hypothesis = ['∅'] * n
+    for row in data:
+        if row[-1].lower() == 'yes':
+            if hypothesis == ['∅'] * n:
+                hypothesis = row[:-1]
+            else:
+                for i in range(n):
+                    if hypothesis[i] != row[i]:
+                        hypothesis[i] = '?'
+    return hypothesis
+
+n, data = get_input()
+result = find_s_algorithm(n, data)
+print("Most specific hypothesis:", result)
